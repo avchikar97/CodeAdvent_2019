@@ -4,11 +4,9 @@ def main():
     MIN = 152085
     MAX = 670283
 
-    MIN = 155555
-    MAX = 669999
-    good_passwords = [MIN, MAX]
+    good_passwords = set()
 
-    for test_pass in range(MIN, MAX):
+    for test_pass in range(MIN, MAX + 1):
         rule2 = False
         rule3 = True
         digits = [int(i) for i in str(test_pass)]
@@ -21,18 +19,12 @@ def main():
             if((curr_dig == last_dig) and not rule2):
                 rule2 = True
             last_dig = curr_dig
-        if(rule2 and rule3):
-            good_passwords.append(test_pass)
-
-
-    final_passwords = []
-    for test_pass in good_passwords:
-        digits = [int(i) for i in str(test_pass)]
         digit_counter = Counter(digits)
-        if 2 in digit_counter.values():
-            final_passwords.append(test_pass)
+        if(rule2 and rule3):
+            if 2 in digit_counter.values():
+                good_passwords.add(test_pass)
 
-    print(f"# of good passwords = {len(final_passwords)}")
+    print(f"# of good passwords = {len(good_passwords)}")
     #print(good_passwords)
 
 
