@@ -1,6 +1,6 @@
 import os
 from typing import IO
-from anytree import Node
+from anytree import Node, Walker
 
 def main():
     input_file_path = f"{os.path.dirname(os.path.abspath(__file__))}\\input"
@@ -12,7 +12,6 @@ def doShit(input_file: IO):
     graph = dict()
     IDX_ORBITEE = 0
     IDX_ORBITER = 1
-    number_of_orbits = 0
     while pair: ### build tree
         pair = pair.replace('\n', '')
         nodes = pair.split(")")
@@ -28,11 +27,15 @@ def doShit(input_file: IO):
         nodes = pair.split(")")
         graph[nodes[IDX_ORBITER]].parent = graph[nodes[IDX_ORBITEE]]
         pair = input_file.readline()
-    for node in graph.values():
-        number_of_orbits += node.depth
+    w = Walker()
+    (upwards, common, downwards) = w.walk(graph["YOU"], graph["SAN"])
+    min_transfers = 0
+    min_transfers += len(upwards)
+    min_transfers += len(downwards)
+    min_transfers -= 2 # don't need to count the initial thing and the final thing
 
 
-    print(f"Number of orbits: {number_of_orbits}")
+    print(f"Number of minimum transfers: {min_transfers}")
 
 
 
