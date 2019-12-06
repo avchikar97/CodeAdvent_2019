@@ -1,6 +1,6 @@
 import os
-import math
 from typing import IO
+from anytree import Node
 
 def main():
     input_file_path = f"{os.path.dirname(os.path.abspath(__file__))}\\input"
@@ -8,140 +8,32 @@ def main():
         doShit(fp)
 
 def doShit(input_file: IO):
-    contents = input_file.read()
-    x = contents.split(",")
-    numbers = [int(element) for element in x]
-    i = 0
-    while i < len(x):
-        opcode = (numbers[i] % 100) # ones and tenths place
-        instruction_digits = [int(y) for y in str(numbers[i])]
-        if(len(instruction_digits) != 0):
-            instruction_digits.pop() # don't care
-        if(len(instruction_digits) != 0):
-            instruction_digits.pop() # don't care
-        instruction_digits.reverse()
+    pair = input_file.readline()
+    graph = dict()
+    IDX_ORBITEE = 0
+    IDX_ORBITER = 1
+    number_of_orbits = 0
+    while pair: ### build tree
+        pair = pair.replace('\n', '')
+        nodes = pair.split(")")
+        node_orbitee = Node(nodes[IDX_ORBITEE])
+        node_orbiter = Node(nodes[IDX_ORBITER])
+        graph[nodes[IDX_ORBITEE]] = node_orbitee
+        graph[nodes[IDX_ORBITER]] = node_orbiter
+        pair = input_file.readline()
+    input_file.seek(0)
+    pair = input_file.readline()
+    while pair: ### build tree
+        pair = pair.replace('\n', '')
+        nodes = pair.split(")")
+        graph[nodes[IDX_ORBITER]].parent = graph[nodes[IDX_ORBITEE]]
+        pair = input_file.readline()
+    for node in graph.values():
+        number_of_orbits += node.depth
 
-        if (opcode == 1) or (opcode == 2):
-            modes = [0, 0, 0]
-            args = [numbers[i+1], numbers[i+2], numbers[i+3]]
-            badbad = False
-            for idx, instruction_digit in enumerate(instruction_digits):
-                modes[idx] = instruction_digit # e.g. modes[0] is the mode of the first parameter
-            for idx, mode in enumerate(modes):
-                if(mode == 0):
-                    if(args[idx] > len(numbers)):
-                        badbad = True
-                        continue
-                    args[idx] = numbers[args[idx]] # get the number at this address (taken as address)
-                else:
-                    args[idx] = args[idx] # take it as a value
-            if(badbad):
-                break
-            if(opcode == 1):
-                numbers[numbers[i+3]] = args[1] + args[0]
-            elif(opcode == 2):
-                numbers[numbers[i+3]] = args[1] * args[0]
-            i += 4
-        elif (opcode == 3):
-            input_value = int(input("Enter input: "))
-            pos1 = numbers[i+1]
-            if(pos1 > len(numbers)):
-                break
-            numbers[pos1] = input_value
-            i += 2
-        elif (opcode == 4):
-            pos1 = numbers[i+1]
-            if(pos1 > len(numbers)):
-                break
-            print(f"Code: {numbers[pos1]}")
-            i += 2
-        elif(opcode == 5):
-            modes = [0, 0]
-            args = [numbers[i+1], numbers[i+2]]
-            badbad = False
-            for idx, instruction_digit in enumerate(instruction_digits):
-                modes[idx] = instruction_digit # e.g. modes[0] is the mode of the first parameter
-            for idx, mode in enumerate(modes):
-                if(mode == 0):
-                    if(args[idx] > len(numbers)):
-                        badbad = True
-                        continue
-                    args[idx] = numbers[args[idx]] # get the number at this address (taken as address)
-                else:
-                    args[idx] = args[idx] # take it as a value
-            if(badbad):
-                break
-            if(args[0] != 0):
-                i = args[1]
-            else:
-                i += 3
-        elif(opcode == 6):
-            modes = [0, 0]
-            args = [numbers[i+1], numbers[i+2]]
-            badbad = False
-            for idx, instruction_digit in enumerate(instruction_digits):
-                modes[idx] = instruction_digit # e.g. modes[0] is the mode of the first parameter
-            for idx, mode in enumerate(modes):
-                if(mode == 0):
-                    if(args[idx] > len(numbers)):
-                        badbad = True
-                        continue
-                    args[idx] = numbers[args[idx]] # get the number at this address (taken as address)
-                else:
-                    args[idx] = args[idx] # take it as a value
-            if(badbad):
-                break
-            if(args[0] == 0):
-                i = args[1]
-            else:
-                i += 3
-        elif(opcode == 7):
-            modes = [0, 0, 0]
-            args = [numbers[i+1], numbers[i+2], numbers[i+3]]
-            badbad = False
-            for idx, instruction_digit in enumerate(instruction_digits):
-                modes[idx] = instruction_digit # e.g. modes[0] is the mode of the first parameter
-            for idx, mode in enumerate(modes):
-                if(mode == 0):
-                    if(args[idx] > len(numbers)):
-                        badbad = True
-                        continue
-                    args[idx] = numbers[args[idx]] # get the number at this address (taken as address)
-                else:
-                    args[idx] = args[idx] # take it as a value
-            if(badbad):
-                break
-            if(args[0] < args[1]):
-                numbers[numbers[i+3]] = 1
-            else:
-                numbers[numbers[i+3]] = 0
-            i += 4
-        elif(opcode == 8):
-            modes = [0, 0, 0]
-            args = [numbers[i+1], numbers[i+2], numbers[i+3]]
-            badbad = False
-            for idx, instruction_digit in enumerate(instruction_digits):
-                modes[idx] = instruction_digit # e.g. modes[0] is the mode of the first parameter
-            for idx, mode in enumerate(modes):
-                if(mode == 0):
-                    if(args[idx] > len(numbers)):
-                        badbad = True
-                        continue
-                    args[idx] = numbers[args[idx]] # get the number at this address (taken as address)
-                else:
-                    args[idx] = args[idx] # take it as a value
-            if(badbad):
-                break
-            if(args[0] == args[1]):
-                numbers[numbers[i+3]] = 1
-            else:
-                numbers[numbers[i+3]] = 0
-            i += 4
-        elif opcode == 99:
-            break
-        else:
-            continue
-    print(f"First number = {numbers[0]}")
+
+    print(f"Number of orbits: {number_of_orbits}")
+
 
 
 if __name__ == "__main__":
