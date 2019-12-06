@@ -13,7 +13,7 @@ def doShit(input_file: IO):
     IDX_ORBITEE = 0
     IDX_ORBITER = 1
     number_of_orbits = 0
-    while pair: ### create nodes tree
+    while pair: ### create all nodes
         pair = pair.replace('\n', '')
         nodes = pair.split(")")
         node_orbitee = Node(nodes[IDX_ORBITEE])
