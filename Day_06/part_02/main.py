@@ -29,11 +29,7 @@ def doShit(input_file: IO):
         pair = input_file.readline()
     w = Walker()
     (upwards, common, downwards) = w.walk(graph["YOU"], graph["SAN"])
-    min_transfers = 0
-    min_transfers += len(upwards)
-    min_transfers += len(downwards)
-    min_transfers -= 2 # don't need to count the initial thing and the final thing
-
+    min_transfers = len(upwards) + len(downwards) - 2 # don't need to count the initial thing and the final thing
 
     print(f"Number of minimum transfers: {min_transfers}")
 
