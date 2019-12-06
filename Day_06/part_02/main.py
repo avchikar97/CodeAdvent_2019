@@ -12,7 +12,7 @@ def doShit(input_file: IO):
     graph = dict()
     IDX_ORBITEE = 0
     IDX_ORBITER = 1
-    while pair: ### build tree
+    while pair: ### create all notes
         pair = pair.replace('\n', '')
         nodes = pair.split(")")
         node_orbitee = Node(nodes[IDX_ORBITEE])
@@ -22,7 +22,7 @@ def doShit(input_file: IO):
         pair = input_file.readline()
     input_file.seek(0)
     pair = input_file.readline()
-    while pair: ### build tree
+    while pair: ### build tree (assign parents)
         pair = pair.replace('\n', '')
         nodes = pair.split(")")
         graph[nodes[IDX_ORBITER]].parent = graph[nodes[IDX_ORBITEE]]
