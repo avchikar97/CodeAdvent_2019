@@ -31,7 +31,6 @@ def doShit(input_file: IO):
     for node in graph.values():
         number_of_orbits += node.depth
 
-
     print(f"Number of orbits: {number_of_orbits}")
 
 

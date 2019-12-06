@@ -12,6 +12,7 @@ def doShit(input_file: IO):
     graph = dict()
     IDX_ORBITEE = 0
     IDX_ORBITER = 1
+    min_transfers = 0
     while pair: ### create all nodes
         pair = pair.replace('\n', '')
         nodes = pair.split(")")
