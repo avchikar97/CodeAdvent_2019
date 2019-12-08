@@ -12,6 +12,7 @@ def doShit(input_file: IO):
     x = contents.split(",")
     numbers = [int(element) for element in x]
     i = 0
+    return_list = []
     while i < len(x):
         opcode = (numbers[i] % 100) # ones and tenths place
         instruction_digits = [int(y) for y in str(numbers[i])]
@@ -54,10 +55,13 @@ def doShit(input_file: IO):
             if(pos1 > len(numbers)):
                 break
             print(numbers[pos1])
+            return_list.append(numbers[pos1])
             i += 2
         elif opcode == 99:
             break
     print(f"First number = {numbers[0]}")
+    return_list.insert(0, numbers[0])
+    return return_list
 
 
 if __name__ == "__main__":
