@@ -1,4 +1,11 @@
+import time
+
 def main():
+    start_time = time.time()
+    doShit()
+    print("--- %s seconds ---" % (time.time() - start_time))
+
+def doShit():
     MIN = 152085
     MAX = 670283
 

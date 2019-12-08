@@ -1,11 +1,14 @@
 import os
 import math
 from typing import IO
+import time
 
 def main():
+    start_time = time.time()
     input_file_path = f"{os.path.dirname(os.path.abspath(__file__))}\\input"
     with open(input_file_path, "rt") as fp:
         doShit(fp)
+    print("--- %s seconds ---" % (time.time() - start_time))
 
 def doShit(input_file: IO):
     contents = input_file.read()
