@@ -3,10 +3,12 @@ import math
 from typing import IO
 from copy import deepcopy
 import time
+from pathlib import Path
 
 def main():
     start_time = time.time()
-    input_file_path = f"{os.path.dirname(os.path.abspath(__file__))}\\input"
+    data_folder = Path(os.path.dirname(os.path.abspath(__file__)))
+    input_file_path = data_folder/"input"
     with open(input_file_path, "rt") as fp:
         doShit(fp)
     print("--- %s seconds ---" % (time.time() - start_time))

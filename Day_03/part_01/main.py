@@ -3,6 +3,7 @@ import math
 from typing import IO
 import numpy as np
 import time
+from pathlib import Path
 
 SOME_SIZE = 30000
 CENTER = SOME_SIZE/2
@@ -11,7 +12,8 @@ primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97
 
 def main():
     start_time = time.time()
-    input_file_path = f"{os.path.dirname(os.path.abspath(__file__))}/input"
+    data_folder = Path(os.path.dirname(os.path.abspath(__file__)))
+    input_file_path = data_folder/"input"
     with open(input_file_path, "rt") as fp:
         lines = fp.read().split("\n")
         doStuff(lines)
