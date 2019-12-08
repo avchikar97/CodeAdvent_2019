@@ -17,7 +17,7 @@ def doShit(input_file: IO):
     amp_permutations = itertools.permutations([5, 6, 7, 8, 9])
     phase_permutations = []
     outputs = []
-    DEBUG_VALUE = 1
+    DEBUG_VALUE = 0
     for amp_perm in amp_permutations :
         input_set = [0]
         amplifiers = []
