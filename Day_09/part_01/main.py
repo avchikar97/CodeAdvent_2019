@@ -1,7 +1,7 @@
 import os
 from typing import IO
 from anytree import Node
-import opcodes
+import IntcodeComputer
 import itertools
 from copy import deepcopy
 import time
@@ -19,7 +19,7 @@ def doShit(input_file: IO):
     contents = input_file.read()
     x = contents.split(",")
     operations = [int(element) for element in x]
-    my_computer = opcodes.IntcodeComputer(deepcopy(operations))
+    my_computer = IntcodeComputer.IntcodeComputer(deepcopy(operations))
     outputs = []
     while(True):
         output = my_computer.doShit(1)
