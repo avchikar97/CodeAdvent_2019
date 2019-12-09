@@ -1,9 +1,10 @@
 import numpy as np
+from copy import deepcopy
 
 class IntcodeComputer:
 
-    def __init__(self, intcodes: list):
-        self.intcodes = intcodes
+    def __init__(self, operations: list):
+        self.intcodes = deepcopy(operations)
         self.current_address = 0
         self.return_list = []
         self.relative_base = 0
@@ -25,12 +26,14 @@ class IntcodeComputer:
                 if(args[idx] > len(operations)):
                     operations.extend(np.zeros((args[idx] + 2) - len(operations), dtype=int))
                 args[idx] = operations[args[idx]] # get the number at this address (taken as address)
+            elif(modes[idx] == 1):
+                args[idx] = args[idx] # 1: value mode
             elif(modes[idx] == 2): # 2: relative mode
                 if((self.relative_base + args[idx]) > len(operations)):
                     operations.extend(np.zeros((self.relative_base + args[idx] + 1) - len(operations), dtype=int))
                 args[idx] = operations[self.relative_base + args[idx]] # get the number at this address (taken as address)
             else:
-                args[idx] = args[idx] # 1: value mode
+                continue
         return
 
     def doShit(self, input_num: int, DEBUG: int = 0):
@@ -58,10 +61,9 @@ class IntcodeComputer:
                 numbers[numbers[self.current_address+3]] = args[1] * args[0]
                 self.current_address += self.address_increment_dict.get(opcode)
             elif (opcode == 3):
-                input_value = input_num
                 args = [numbers[self.current_address+1]]
                 self.processModes(numbers, modes, args)
-                numbers[args[0]] = input_value
+                numbers[args[0]] = input_num
                 self.current_address += self.address_increment_dict.get(opcode)
             elif (opcode == 4):
                 args = [numbers[self.current_address+1]]

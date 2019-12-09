@@ -19,7 +19,7 @@ def doShit(input_file: IO):
     contents = input_file.read()
     x = contents.split(",")
     operations = [int(element) for element in x]
-    my_computer = IntcodeComputer.IntcodeComputer(deepcopy(operations))
+    my_computer = IntcodeComputer.IntcodeComputer(operations)
     outputs = []
     while(True):
         output = my_computer.doShit(1)
