@@ -24,7 +24,6 @@ def doShit(input_file: IO):
     while(True):
         output = my_computer.doShit(1)
         if(output == 99):
-            #outputs.append(my_computer.return_list[-1])
             break
         else:
             outputs.append(my_computer.return_list[-1])
