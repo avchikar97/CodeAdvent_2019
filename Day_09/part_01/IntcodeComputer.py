@@ -23,15 +23,15 @@ class IntcodeComputer:
     def processModes(self, operations: list, modes: list, args: list):
         for idx in range(0, len(args)):
             if(modes[idx] == 0): # 0: position mode
-                if(args[idx] > len(operations)):
-                    operations.extend(np.zeros((args[idx] + 2) - len(operations), dtype=int))
+                if(operations[args[idx]] >= len(operations)):
+                    operations.extend(np.zeros((operations[args[idx]] + 2) - len(operations), dtype=int))
                 args[idx] = operations[args[idx]] # get the number at this address (taken as address)
             elif(modes[idx] == 1):
                 args[idx] = args[idx] # 1: value mode
             elif(modes[idx] == 2): # 2: relative mode
-                if((self.relative_base + args[idx]) > len(operations)):
-                    operations.extend(np.zeros((self.relative_base + args[idx] + 1) - len(operations), dtype=int))
-                args[idx] = operations[self.relative_base + args[idx]] # get the number at this address (taken as address)
+                if((self.relative_base + operations[args[idx]]) >= len(operations)):
+                    operations.extend(np.zeros((self.relative_base + operations[args[idx]] + 2) - len(operations), dtype=int))
+                args[idx] = operations[args[idx]] + self.relative_base # get the number at this address (taken as address)
             else:
                 continue
         return
@@ -51,60 +51,60 @@ class IntcodeComputer:
                 modes[idx] = instruction_digit # e.g. modes[0] is the mode of the first parameter
 
             if (opcode == 1):
-                args = [numbers[self.current_address+1], numbers[self.current_address+2], numbers[self.current_address+3]]
+                args = [self.current_address+1, self.current_address+2, self.current_address+3]
                 self.processModes(numbers, modes, args)
-                numbers[numbers[self.current_address+3]] = args[1] + args[0]
+                numbers[args[2]] = numbers[args[1]] + numbers[args[0]]
                 self.current_address += self.address_increment_dict.get(opcode)
             elif (opcode == 2):
-                args = [numbers[self.current_address+1], numbers[self.current_address+2], numbers[self.current_address+3]]
+                args = [self.current_address+1, self.current_address+2, self.current_address+3]
                 self.processModes(numbers, modes, args)
-                numbers[numbers[self.current_address+3]] = args[1] * args[0]
+                numbers[args[2]] = numbers[args[1]] * numbers[args[0]]
                 self.current_address += self.address_increment_dict.get(opcode)
             elif (opcode == 3):
-                args = [numbers[self.current_address+1]]
+                args = [self.current_address+1]
                 self.processModes(numbers, modes, args)
                 numbers[args[0]] = input_num
                 self.current_address += self.address_increment_dict.get(opcode)
             elif (opcode == 4):
-                args = [numbers[self.current_address+1]]
+                args = [self.current_address+1]
                 self.processModes(numbers, modes, args)
-                self.return_list.append(args[0])
+                self.return_list.append(numbers[args[0]])
                 self.current_address += self.address_increment_dict.get(opcode)
                 return self.return_list
             elif (opcode == 5):
-                args = [numbers[self.current_address+1], numbers[self.current_address+2]]
+                args = [self.current_address+1, self.current_address+2]
                 self.processModes(numbers, modes, args)
-                if(args[0] != 0):
-                    self.current_address = args[1]
+                if(numbers[args[0]] != 0):
+                    self.current_address = numbers[args[1]]
                 else:
                     self.current_address += self.address_increment_dict.get(opcode)
             elif (opcode == 6):
-                args = [numbers[self.current_address+1], numbers[self.current_address+2]]
+                args = [self.current_address+1, self.current_address+2]
                 self.processModes(numbers, modes, args)
-                if(args[0] == 0):
-                    self.current_address = args[1]
+                if(numbers[args[0]] == 0):
+                    self.current_address = numbers[args[1]]
                 else:
                     self.current_address += self.address_increment_dict.get(opcode)
             elif (opcode == 7):
-                args = [numbers[self.current_address+1], numbers[self.current_address+2], numbers[self.current_address+3]]
+                args = [self.current_address+1, self.current_address+2, self.current_address+3]
                 self.processModes(numbers, modes, args)
-                if(args[0] < args[1]):
-                    numbers[numbers[self.current_address+3]] = 1
+                if(numbers[args[0]] < numbers[args[1]]):
+                    numbers[args[2]] = 1
                 else:
-                    numbers[numbers[self.current_address+3]] = 0
+                    numbers[args[2]] = 0
                 self.current_address += self.address_increment_dict.get(opcode)
             elif (opcode == 8):
-                args = [numbers[self.current_address+1], numbers[self.current_address+2], numbers[self.current_address+3]]
+                args = [self.current_address+1, self.current_address+2, self.current_address+3]
                 self.processModes(numbers, modes, args)
-                if(args[0] == args[1]):
-                    numbers[numbers[self.current_address+3]] = 1
+                if(numbers[args[0]] == numbers[args[1]]):
+                    numbers[args[2]] = 1
                 else:
-                    numbers[numbers[self.current_address+3]] = 0
+                    numbers[args[2]] = 0
                 self.current_address += self.address_increment_dict.get(opcode)
             elif (opcode == 9):
-                args = [numbers[self.current_address+1]]
+                args = [self.current_address+1]
                 self.processModes(numbers, modes, args)
-                self.relative_base += args[0]
+                self.relative_base += numbers[args[0]]
                 self.current_address += self.address_increment_dict.get(opcode)
             elif (opcode == 99):
                 return 99
